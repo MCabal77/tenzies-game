@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import React from 'react';
+import GameContainer from './components/GameContainer';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <main >
+    <main className='font-karla bg-initial h-screen px-10 py-16 text-primary'>
+      <GameContainer/>
     </main>
   )
 }
