@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import {nanoid} from 'nanoid';
 
 import { getRandomInt } from "../utils/functions";
 import Die from "./Die";
@@ -8,12 +9,20 @@ function GameContainer() {
   const allNewDice = function () {
     let arr = [];
     for (let i = 0; i < 10; i++) {
-      arr.push(getRandomInt(1, 6));
+      arr.push({
+        value: getRandomInt(1, 6),
+        isHeld: false,
+        id: nanoid(),
+      });
     }
     return arr;
   };
 
-  const [allDice, setAllDice] = useState(allNewDice);
+  const [allDice, setAllDice] = useState(allNewDice());
+
+  const reRoll = function() {
+    setAllDice(allNewDice());
+  }
 
   return (
     // Game container
@@ -26,12 +35,12 @@ function GameContainer() {
       </h3>
       {/* Container for dice */}
       <div className="p-16 grid gap-10 grid-cols-5">
-        {allDice.map((element, index) => (
-          <Die key={index + 1} value={element} />
+        {allDice.map((element) => (
+          <Die key={element.id} value={element.value} />
         ))}
       </div>
       {/* Button */}
-      <button className="bg-button text-white w-44 h-16 rounded-lg font-bold text-2xl">
+      <button className="bg-button text-white w-44 h-16 rounded-lg font-bold text-2xl transition duration-300 hover:cursor-pointer hover:scale-95 hover:bg-blue-500" onClick={reRoll}>
         Roll
       </button>
     </div>
