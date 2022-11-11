@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import {nanoid} from 'nanoid';
+import { nanoid } from "nanoid";
 
 import { getRandomInt } from "../utils/functions";
 import Die from "./Die";
@@ -20,9 +20,22 @@ function GameContainer() {
 
   const [allDice, setAllDice] = useState(allNewDice());
 
-  const reRoll = function() {
+  const reRoll = function () {
     setAllDice(allNewDice());
-  }
+  };
+
+  const holdDice = function (id) {
+    setAllDice((oldDice) =>
+      oldDice.map((currentDie) => {
+        return currentDie.id === id
+          ? {
+              ...currentDie,
+              isHeld: !currentDie.isHeld,
+            }
+          : currentDie;
+      })
+    );
+  };
 
   return (
     // Game container
@@ -36,11 +49,21 @@ function GameContainer() {
       {/* Container for dice */}
       <div className="p-16 grid gap-10 grid-cols-5">
         {allDice.map((element) => (
-          <Die key={element.id} value={element.value} />
+          <Die
+            key={element.id}
+            value={element.value}
+            isHeld={element.isHeld}
+            toggleLock={() => {
+              holdDice(element.id);
+            }}
+          />
         ))}
       </div>
       {/* Button */}
-      <button className="bg-button text-white w-44 h-16 rounded-lg font-bold text-2xl transition duration-300 hover:cursor-pointer hover:scale-95 hover:bg-blue-500" onClick={reRoll}>
+      <button
+        className="bg-button text-white w-44 h-16 rounded-lg font-bold text-2xl transition duration-300 hover:cursor-pointer hover:scale-95 hover:bg-blue-500"
+        onClick={reRoll}
+      >
         Roll
       </button>
     </div>

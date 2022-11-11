@@ -1,8 +1,8 @@
 import React from "react";
 
-function Die({ value }) {
+function Die({ value, isHeld, toggleLock}) {
   return (
-    <div className=" w-20 h-20 bg-white flex items-center justify-center rounded-xl shadow-lg">
+    <div className={`w-20 h-20 ${isHeld ? `bg-locked` : `bg-white`} bg-white flex items-center duration-300 justify-center rounded-xl shadow-lg`} onClick={toggleLock}>
       <p className=" font-extrabold text-2xl ">{value}</p>
     </div>
   );
