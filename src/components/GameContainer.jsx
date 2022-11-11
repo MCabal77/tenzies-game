@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+import Confetti from "react-confetti";
+
 import { useState } from "react";
 import { nanoid } from "nanoid";
 
@@ -33,7 +35,7 @@ function GameContainer() {
     let allSame = allDice.every((die) => die.value === checkValue);
     if (allHeld && allSame) {
       setTenzies(true);
-      console.log('You won!');
+      console.log("You won!");
     }
   }, [allDice]);
 
@@ -58,9 +60,15 @@ function GameContainer() {
     );
   };
 
+  const resetGame = function () {
+    setAllDice((oldDice) => oldDice.map(() => getNewDie()));
+    setTenzies(false);
+  };
+
   return (
     // Game container
     <div className="bg-game h-full w-full rounded-lg p-20 flex flex-col justify-center items-center">
+      {tenzies && <Confetti />}
       {/* Header | Info*/}
       <h1 className="text-primary font-bold text-5xl">Tenzies</h1>
       <h3 className="text-secondary font-inter font-normal text-2xl">
@@ -82,10 +90,9 @@ function GameContainer() {
       </div>
       {/* Button */}
       <button
-        className="bg-button text-white w-44 h-16 rounded-lg font-bold text-2xl transition duration-300 hover:cursor-pointer hover:scale-95 hover:bg-blue-500"
-        onClick={reRoll}
+        className="bg-button text-white w-44 h-16 rounded-lg font-bold text-2xl transition duration-300 hover:cursor-pointer hover:scale-95 hover:bg-blue-500" onClick={tenzies ? resetGame : reRoll}
       >
-        {tenzies ? 'You Won!' : 'Roll'}
+        {tenzies ? "New Game" : "Roll"}
       </button>
     </div>
   );
