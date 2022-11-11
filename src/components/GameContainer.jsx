@@ -6,14 +6,18 @@ import { getRandomInt } from "../utils/functions";
 import Die from "./Die";
 
 function GameContainer() {
+  const getNewDie = function () {
+    return {
+      value: getRandomInt(1, 6),
+      isHeld: false,
+      id: nanoid(),
+    };
+  };
+
   const allNewDice = function () {
     let arr = [];
     for (let i = 0; i < 10; i++) {
-      arr.push({
-        value: getRandomInt(1, 6),
-        isHeld: false,
-        id: nanoid(),
-      });
+      arr.push(getNewDie());
     }
     return arr;
   };
@@ -21,7 +25,11 @@ function GameContainer() {
   const [allDice, setAllDice] = useState(allNewDice());
 
   const reRoll = function () {
-    setAllDice(allNewDice());
+    setAllDice((oldDice) =>
+      oldDice.map((currentDie) => {
+        return !currentDie.isHeld ? getNewDie() : currentDie;
+      })
+    );
   };
 
   const holdDice = function (id) {
