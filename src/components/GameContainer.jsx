@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { nanoid } from "nanoid";
 
@@ -6,6 +6,9 @@ import { getRandomInt } from "../utils/functions";
 import Die from "./Die";
 
 function GameContainer() {
+  // State for game win
+  const [tenzies, setTenzies] = useState(false);
+
   const getNewDie = function () {
     return {
       value: getRandomInt(1, 6),
@@ -23,6 +26,16 @@ function GameContainer() {
   };
 
   const [allDice, setAllDice] = useState(allNewDice());
+
+  useEffect(() => {
+    let allHeld = allDice.every((die) => die.isHeld);
+    let checkValue = allDice[0].value;
+    let allSame = allDice.every((die) => die.value === checkValue);
+    if (allHeld && allSame) {
+      setTenzies(true);
+      console.log('You won!');
+    }
+  }, [allDice]);
 
   const reRoll = function () {
     setAllDice((oldDice) =>
@@ -72,7 +85,7 @@ function GameContainer() {
         className="bg-button text-white w-44 h-16 rounded-lg font-bold text-2xl transition duration-300 hover:cursor-pointer hover:scale-95 hover:bg-blue-500"
         onClick={reRoll}
       >
-        Roll
+        {tenzies ? 'You Won!' : 'Roll'}
       </button>
     </div>
   );
